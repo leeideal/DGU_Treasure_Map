@@ -10,9 +10,10 @@ const ToCenter = styled.div`
 `
 
 const Background = styled.section`
-    max-width: 500px;
+    max-width: 430px;
+    min-width: 350px;
     max-height: 100vh;
-    width : 100%; 
+    width : 100vw; 
     display: flex;
     flex-direction: column;
     align-items: center;
