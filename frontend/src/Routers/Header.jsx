@@ -8,7 +8,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-top: 10px;
+    margin: 15px 0px;
     padding: 0px 5px;
 `
 
@@ -56,7 +56,7 @@ function Header() {
                 동국<br />보물지도
             </Title>
             <Form onSubmit={handleSubmit(onValid)}>
-                <Input {...register("where", {required : true})} placeholder="원하는 장소를 검색하세요" />
+                <Input {...register("where", {required : true})} placeholder="건물명을 입력하세요" />
                 <Icon icon={faMagnifyingGlass} />
             </Form>
         </Container>
