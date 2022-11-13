@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import Map from './Map';
 
 const Container = styled.div`
     width: 100%;
@@ -24,12 +25,6 @@ const CItem = styled(SwiperSlide)`
 `
 
 
-
-// 맵 관련
-const Map = styled.section`
-    
-`
-
 function Body() {
     // 어떤 카테고리를 눌렀는지
     const CategoryClick = (event) => {
@@ -37,6 +32,7 @@ function Body() {
     }
     return (
         <Container>
+            {/* 카테고리 선택 부분 */}
             <Category>
                 <Swiper
                     slidesPerView={5}
@@ -53,9 +49,9 @@ function Body() {
                     ))}
                 </Swiper>
             </Category>
-            <Map>
 
-            </Map>
+            {/* 지도 부분 */}
+            <Map />
         </Container>
     )
 }
