@@ -3,11 +3,22 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import Map from './Map';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+import back from "../img/back2.png";
+import { useEffect } from "react";
+
+import $ from 'jquery';
 
 const Container = styled.div`
     width: 100%;
     background-color: #C7E2DD;
+    height: 88vh;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     margin-top: 10px;
+    position: relative;
 `
 
 // 카테고리 관련
@@ -22,7 +33,91 @@ const CItem = styled(SwiperSlide)`
     padding: 10px 15px;
     display: flex;
     justify-content: center;
+    font-weight: 600;
 `
+
+// List
+const ListContainer = styled.div`
+    background-color: white;
+    width: 100%;
+    position: absolute;
+    top : 420px;
+    left: 0;
+    z-index: 5;
+    height: 32%;
+    min-height : fit-content;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+`
+
+const ListHeader = styled.div`
+    padding-top : 15px;
+    margin-bottom: 15px;
+`
+const LItem = styled(SwiperSlide)`
+    padding: 5px 0px;
+    font-size: 11px;
+    border: 1px solid rgba(0,0,0,0.15);
+    text-align: center;
+    border-radius: 20px;
+    font-weight: 600;
+`
+
+const ListDiv = styled.div`
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0,0,0,0.10);
+`
+const ItemBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+`
+
+const Item = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span{
+        font-size: 10px;
+        color : rgba(0,0,0,0.5);
+        margin-bottom: 7px;
+    }
+    h6{
+        margin-bottom: 10px;
+    }
+    padding: 15px 20px;
+    border-bottom: 2px solid #C7E2DD;
+`
+
+const Info = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`
+
+const ItemImg = styled.img`
+    width: 55px;
+    height: 55px;
+`
+
+const FooterInfo = styled.div`
+    display: flex;
+    align-items: center;
+    p{
+        margin-top: 2px;
+        font-size: 14px;
+    }
+`
+
+const Pin = styled(FontAwesomeIcon)`
+    color : #C7E2DD;
+    margin-right: 5px;
+`
+
+const test = ["경영관", "학림관" , "사회과학관", "신공학관", "원흥관", "상록원"]
 
 
 function Body() {
@@ -30,6 +125,37 @@ function Body() {
     const CategoryClick = (event) => {
         console.log(event.currentTarget.innerText);
     }
+
+    useEffect(() => {
+        window.addEventListener('touchmove', handleScroll);
+        return () => {
+        window.removeEventListener('touchmove', handleScroll); //clean up
+        };
+    }, []);
+
+    let lastScrollY = 0;
+    const handleScroll = (e) => {
+        const scrollY = e.currentTarget.pageYOffset;
+        //const scrollY = e.path[1].window.pageYOffset;
+        const direction = scrollY - lastScrollY  > 0 ? false : true;
+        lastScrollY = scrollY;
+        if(direction){
+            console.log("down")
+            $("#list").animate({
+                top: "420px",
+                height : "32%"
+            }, 500);
+        }else{
+            console.log("up")
+            $("#list").animate({
+                top: "100px",
+                height : "90%"
+            }, 500);
+        }
+        
+    };
+
+    
     return (
         <Container>
             {/* 카테고리 선택 부분 */}
@@ -40,7 +166,7 @@ function Body() {
                     pagination={{
                     clickable: true,
                     }}
-                    className="mySwiper"
+                    style={{marginRight: "10px", marginLeft:"10px"}} 
                 >
                     {catelist.map((i, v) => (
                         <CItem onClick={(event) => CategoryClick(event)} key={v} value={i}>
@@ -52,6 +178,74 @@ function Body() {
 
             {/* 지도 부분 */}
             <Map />
+
+            {/* 나오는 리스트들 */}
+            <ListContainer id="list">
+                <ListHeader>
+                    <Swiper
+                    slidesPerView={4}
+                    spaceBetween={20}
+                    pagination={{
+                        clickable: true,
+                    }}
+                     style={{marginRight: "10px", marginLeft:"10px"}}   
+                    >
+                        {test.map((i, v) => (
+                            <LItem  key={v} value={i}>
+                                {i}
+                            </LItem>
+                        ))}
+                    </Swiper>
+                </ListHeader>
+                <ListDiv/>
+                <ItemBox>
+                    {/* 검색 리스트가 쭉 뜨는 곳 */}
+                    <Item>
+                        <Info>
+                            <span>장학</span>
+                            <h6>장학센터</h6>
+                            <FooterInfo>
+                                <Pin icon={faLocationDot}/>
+                                <p>본관 2층</p>
+                            </FooterInfo>
+                        </Info>
+                        <ItemImg src={back}/>
+                    </Item>
+                    <Item>
+                        <Info>
+                            <span>장학</span>
+                            <h6>장학센터</h6>
+                            <FooterInfo>
+                                <Pin icon={faLocationDot}/>
+                                <p>본관 2층</p>
+                            </FooterInfo>
+                        </Info>
+                        <ItemImg src={back}/>
+                    </Item>
+                    <Item>
+                        <Info>
+                            <span>장학</span>
+                            <h6>장학센터</h6>
+                            <FooterInfo>
+                                <Pin icon={faLocationDot}/>
+                                <p>본관 2층</p>
+                            </FooterInfo>
+                        </Info>
+                        <ItemImg src={back}/>
+                    </Item>
+                    <Item>
+                        <Info>
+                            <span>장학</span>
+                            <h6>장학센터</h6>
+                            <FooterInfo>
+                                <Pin icon={faLocationDot}/>
+                                <p>본관 2층</p>
+                            </FooterInfo>
+                        </Info>
+                        <ItemImg src={back}/>
+                    </Item>
+                </ItemBox>
+            </ListContainer>
         </Container>
     )
 }

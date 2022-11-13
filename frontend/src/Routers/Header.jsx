@@ -56,7 +56,7 @@ function Header() {
                 동국<br />보물지도
             </Title>
             <Form onSubmit={handleSubmit(onValid)}>
-                <Input {...register("where", {required : true})} placeholder="건물명을 입력하세요" />
+                <Input {...register("where", {required : true})} placeholder="건물, 시설 검색" />
                 <Icon icon={faMagnifyingGlass} />
             </Form>
         </Container>
