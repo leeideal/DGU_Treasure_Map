@@ -11,6 +11,8 @@ import back from "./back2.png";
 import { useState } from "react";
 
 import $ from 'jquery';
+import { useRecoilState } from "recoil";
+import { isClick } from "../../atom";
 
 const Container = styled.div`
     width: 100%;
@@ -25,8 +27,50 @@ const Container = styled.div`
 // 카테고리 관련
 const Category = styled.section`
     margin-top: 15px;
+    margin-bottom: -10px;
 `
-const catelist = ["전체","장학", "교환", "취업", "창업", "학사", "역량", "봉사", "생활", "상담", "편의"]
+const catelist = [
+    {
+        name : "전체",
+        id : 10
+    },
+    {
+        name : "장학",
+        id : 1
+    },
+    {
+        name : "교환",
+        id : 2
+    },
+    {
+        name : "진로",
+        id : 3
+    },
+    {
+        name : "학사",
+        id : 4
+    },
+    {
+        name : "역량",
+        id : 5
+    },
+    {
+        name : "봉사",
+        id : 6
+    },
+    {
+        name : "생활",
+        id : 7
+    },
+    {
+        name : "상담",
+        id : 8
+    },
+    {
+        name : "편의시설",
+        id : 9
+    },
+]
 
 const CItem = styled(SwiperSlide)`
     background-color: white;
@@ -149,10 +193,6 @@ const CheckBoxLogo = styled(FontAwesomeIcon)`
 
 
 function Body() {
-    // 어떤 카테고리를 눌렀는지
-    const CategoryClick = (event) => {
-        console.log(event.currentTarget.innerText);
-    }
 
     // useEffect(() => {
     //     window.addEventListener('touchmove', handleScroll);
@@ -200,6 +240,15 @@ function Body() {
         }
     }
 
+    // 카테고리 클릭
+    const [where, setWhere] = useRecoilState(isClick);
+    // 어떤 카테고리를 눌렀는지
+    const CategoryClick = (event ,i) => {
+        // 전채를 누른 경우 색 다시 들어오게
+        if(i.id === 10){
+            setWhere(0);
+        }
+    }
     
     return (
         <Container>
@@ -213,9 +262,9 @@ function Body() {
                     }}
                     style={{marginRight: "10px", marginLeft:"10px"}} 
                 >
-                    {catelist.map((i, v) => (
-                        <CItem onClick={(event) => CategoryClick(event)} key={v} value={i}>
-                            {i}
+                    {catelist.map((i) => (
+                        <CItem onClick={(event) => CategoryClick(event , i)} key={i.id} value={i.name}>
+                            {i.name}
                         </CItem>
                     ))}
                 </Swiper>
