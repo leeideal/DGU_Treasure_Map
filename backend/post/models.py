@@ -24,7 +24,7 @@ class Facility(models.Model):
     content = models.TextField(max_length=400)
     place = models.ForeignKey(Place, related_name="place", on_delete=models.CASCADE)
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
-    picture = models.TextField(null=True, blank=True)
+    picture = models.ImageField(upload_to = "blog/", blank=True, null=True)
     floor = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
