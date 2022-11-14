@@ -24,3 +24,22 @@ def get_place(request, id):
     #     "floor"
     # }
     return Response(data=serializer.data)
+
+@api_view(['GET'])
+def get_category(request, id):
+    category_id = Category.objects.get(id=id)
+    facilities = Facility.objects.filter(place=category_id)
+    serializer = FacilitySerializer(facilities, many=True)
+
+    # facility_set = {
+    #     "name" = serializer.data['name'],
+    #     "category",
+    #     "id",
+    #     "time",
+    #     "img",
+    #     "phone",
+    #     "use",
+    #     "where",
+    #     "floor"
+    # }
+    return Response(data=serializer.data)
