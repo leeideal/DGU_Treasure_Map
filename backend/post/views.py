@@ -7,6 +7,40 @@ from .serializers import FacilitySerializer,PlaceSerializer,CategorySerializer
 
 import base64
 # Create your views here.
+@api_view(['GET'])
+def main(request):
+    facilities = Facility.objects.all()
+    categories = Category.objects.all()
+    places = Place.objects.all()
+    send_category = []
+    send_place = []
+    send_facility = []
+    for c in categories:
+        send_category.append({c.name:c.id})
+    for p in places:
+        send_place.append({p.name:p.id})
+    for i in facilities:
+        image_data = base64.b64encode(i.picture.read()).decode('utf-8')
+
+        facility_set = {
+            "name":i.name,
+            "category":i.category.name,
+            "id":i.id,
+            "time":f"{i.time_start} ~ {i.time_end}",
+            "img":image_data,
+            "phone":i.phone,
+            "use":i.content,
+            "where":i.place.name,
+            "floor":i.floor,
+        }
+        send_facility.append(facility_set)
+
+    final_json = {
+        "places":send_place,
+        "categories":send_category, 
+        "facilities":send_facility
+        }
+    return Response(data=final_json)
 
 @api_view(['GET'])
 def get_place(request, id):
@@ -20,7 +54,7 @@ def get_place(request, id):
         place_name = place_id.name
         category_name = i.category.name
 
-        if category_name not in send_category:
+        if {category_name:i.category.id} not in send_category:
             send_category.append({category_name:i.category.id})
 
         image_data = base64.b64encode(i.picture.read()).decode('utf-8')
@@ -56,7 +90,7 @@ def get_category(request, id):
         place_name = i.place.name
         category_name = i.category.name
 
-        if place_name not in send_place:
+        if {place_name: i.place.id} not in send_place:
             send_place.append({place_name: i.place.id})
 
         image_data = base64.b64encode(i.picture.read()).decode('utf-8')
