@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLocationDot , faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 
-import back from "../img/back2.png";
-import { useEffect, useState } from "react";
+import back from "./back2.png";
+import { useState } from "react";
 
 import $ from 'jquery';
 
@@ -73,7 +73,7 @@ const ItemBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
+    overflow-y: scroll;
 `
 
 const Item = styled.div`
