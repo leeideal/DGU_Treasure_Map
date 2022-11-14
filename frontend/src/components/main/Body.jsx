@@ -7,12 +7,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLocationDot , faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 
-import back from "./back2.png";
+import defaultImg from "../../img/default.png";
 import { useState } from "react";
 
 import $ from 'jquery';
 import { useRecoilState } from "recoil";
-import { isClick } from "../../atom";
+import { isCate, isClick, isInfo } from "../../atom";
+import { useEffect } from "react";
+import { API } from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -67,7 +70,7 @@ const catelist = [
         id : 8
     },
     {
-        name : "편의시설",
+        name : "편의",
         id : 9
     },
 ]
@@ -118,6 +121,7 @@ const ItemBox = styled.div`
     flex-direction: column;
     align-items: center;
     overflow-y: scroll;
+    height: 32vh;
 `
 
 const Item = styled.div`
@@ -146,6 +150,7 @@ const Info = styled.div`
 const ItemImg = styled.img`
     width: 55px;
     height: 55px;
+    border-radius: 7px;
 `
 
 const FooterInfo = styled.div`
@@ -161,8 +166,6 @@ const Pin = styled(FontAwesomeIcon)`
     color : #C7E2DD;
     margin-right: 5px;
 `
-
-const test = ["경영관", "학림관" , "사회과학관", "신공학관", "원흥관", "상록원"]
 
 const ListBox = styled.div`
     display: flex;
@@ -193,6 +196,7 @@ const CheckBoxLogo = styled(FontAwesomeIcon)`
 
 
 function Body() {
+    const navigate = useNavigate();
 
     // useEffect(() => {
     //     window.addEventListener('touchmove', handleScroll);
@@ -213,6 +217,23 @@ function Body() {
     //         //console.log("up")
     //     }
     // };
+
+    // 데이터들
+    const [info, SetInfo] = useRecoilState(isInfo);
+
+    useEffect(()=>{
+        getData();
+    },[])
+
+    const getData = async() => {
+        try{
+            const data = await API.get(``);
+            SetInfo(data.data.facilities);
+            setCate(data.data.categories);
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     // listUp & Down Btn
     const [check, setCheck] = useState(false);
@@ -242,11 +263,45 @@ function Body() {
 
     // 카테고리 클릭
     const [where, setWhere] = useRecoilState(isClick);
+    const [cate, setCate] = useRecoilState(isCate);
     // 어떤 카테고리를 눌렀는지
-    const CategoryClick = (event ,i) => {
+    const CategoryClick = async(event ,i) => {
         // 전채를 누른 경우 색 다시 들어오게
         if(i.id === 10){
-            setWhere(0);
+            try{
+                const data = await API.get(``);
+                setWhere(0);
+                SetInfo(data.data.facilities);
+                setCate(data.data.places);
+
+                
+                setWhere([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]);
+
+                console.log(data.data.places);
+            }catch(error){
+                console.log(error);
+            }
+        }else{
+            try{
+                const id = i.id
+                const data = await API.get(`/categoryget/${id}`);
+                //console.log(data);
+                SetInfo(data.data.facilities);
+                setCate(data.data.places);
+                
+                setWhere((prev) => {
+                    const array = [];
+                    for(let i = 0 ; i < data.data.places.length ; i++){
+                        const put = data.data.places[i]
+                        array.push(...Object.values(put))
+                    }
+                    return array
+                });
+                
+                console.log(data.data.places);
+            }catch(error){
+                console.log(error)
+            }
         }
     }
     
@@ -288,9 +343,9 @@ function Body() {
                     }}
                      style={{marginRight: "10px", marginLeft:"10px"}}   
                     >
-                        {test.map((i, v) => (
-                            <LItem  key={v} value={i}>
-                                {i}
+                        {cate.map((i) => (
+                            <LItem  key={Object.values(i)} >
+                                {Object.keys(i)}
                             </LItem>
                         ))}
                     </Swiper>
@@ -298,50 +353,19 @@ function Body() {
                 <ListDiv/>
                 <ItemBox id="realList">
                     {/* 검색 리스트가 쭉 뜨는 곳 */}
-                    <Item>
+                    {info.map(i => (
+                    <Item onClick={()=>navigate(`/detail/${i.id}`)} key={i.id}>
                         <Info>
-                            <span>장학</span>
-                            <h6>장학센터</h6>
+                            <span>{i.category}</span>
+                            <h6>{i.name}</h6>
                             <FooterInfo>
                                 <Pin icon={faLocationDot}/>
-                                <p>본관 2층</p>
+                                <p>{i.where} {i.floor}층</p>
                             </FooterInfo>
                         </Info>
-                        <ItemImg src={back}/>
+                        <ItemImg src={i.img == "" ? defaultImg : `data:image/jpeg;base64,${i.img}`}/>
                     </Item>
-                    <Item>
-                        <Info>
-                            <span>장학</span>
-                            <h6>장학센터</h6>
-                            <FooterInfo>
-                                <Pin icon={faLocationDot}/>
-                                <p>본관 2층</p>
-                            </FooterInfo>
-                        </Info>
-                        <ItemImg src={back}/>
-                    </Item>
-                    <Item>
-                        <Info>
-                            <span>장학</span>
-                            <h6>장학센터</h6>
-                            <FooterInfo>
-                                <Pin icon={faLocationDot}/>
-                                <p>본관 2층</p>
-                            </FooterInfo>
-                        </Info>
-                        <ItemImg src={back}/>
-                    </Item>
-                    <Item>
-                        <Info>
-                            <span>장학</span>
-                            <h6>장학센터</h6>
-                            <FooterInfo>
-                                <Pin icon={faLocationDot}/>
-                                <p>본관 2층</p>
-                            </FooterInfo>
-                        </Info>
-                        <ItemImg src={back}/>
-                    </Item>
+                    ))}
                 </ItemBox>
                 </ListContainer>
             </ListBox>

@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faClock, faSquarePhone, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import img from "./aa.jpeg"
+import img from "../../img/default.png";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { API } from "../../axios";
 
 const Container = styled.div`
     width: 100%;
@@ -19,6 +22,17 @@ const Title = styled.h1`
     margin-bottom: 15px;
     font-family: "Cafe24Ohsquare";
     color : #98D4BF;
+`
+
+const SubTitle = styled.h1`
+    margin-top: -5px;
+    font-size : 14px;
+    text-align: center;
+    word-break: break-all;
+    width: 80%;
+    margin-bottom: 15px;
+    font-family: "Cafe24Ohsquareair";
+    color : #414141;
 `
 
 const Img = styled.img`
@@ -78,16 +92,36 @@ const FooterBox = styled.div`
     }
     p{
         font-size: 14px;
+        word-break: keep-all;
     }
 `
 
 
 
 function Info(){
+    const [data, setData] = useState({});
+    const {id} = useParams()
+
+    useEffect(()=>{
+        getData();
+    },[])
+
+    const getData = async() => {
+        try{
+            const data = await API.get(`facility/${id}`);
+            const reData = data.data;
+            setData(reData)
+            console.log(data.data);
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     return (
         <Container>
-            <Title>경영대학 학사운영실</Title>
-            <Img src={img}/>
+            <Title>{data?.name}</Title>
+            <SubTitle>{data?.category}</SubTitle>
+            <Img src={data?.img === "" ? img : `data:image/jpeg;base64,${data?.img}`}/>
             <InfoBox>
                 <Item>
                     <Icon icon={faLocationDot}/>
@@ -95,7 +129,7 @@ function Info(){
                         Location
                     </ItemTitle>
                     <Footer>
-                        경영관 2층
+                        {data?.place} {data?.floor}층
                     </Footer>
                 </Item>
                 <Divider/>
@@ -105,7 +139,7 @@ function Info(){
                     Time
                     </ItemTitle>
                     <Footer>
-                    09:00 ~ 16:00
+                    {data?.time === "None ~ None" ? "상시" : data?.time}
                     </Footer>
                 </Item>
                 <Divider/>
@@ -115,13 +149,13 @@ function Info(){
                         Phone
                     </ItemTitle>
                     <Footer>
-                        02-0266-4577
+                    {data?.phone === "" ? "없음" : data?.phone}
                     </Footer>
                 </Item>
             </InfoBox>
                 <FooterBox>
                     <h1>사용방법</h1>
-                    <p>본교 학생만 사용 가능한 시설입니다.</p>
+                    <p>{data?.use}</p>
                 </FooterBox>
         </Container>
     );
