@@ -4,10 +4,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 import Map from './Map';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot , faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
 
 import back from "../img/back2.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import $ from 'jquery';
 
@@ -39,13 +40,13 @@ const CItem = styled(SwiperSlide)`
 // List
 const ListContainer = styled.div`
     background-color: white;
-    width: 100%;
+    /* width: 100%;
     position: absolute;
     top : 420px;
     left: 0;
     z-index: 5;
     height: 32%;
-    min-height : fit-content;
+    min-height : fit-content; */
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 `
@@ -119,6 +120,33 @@ const Pin = styled(FontAwesomeIcon)`
 
 const test = ["경영관", "학림관" , "사회과학관", "신공학관", "원흥관", "상록원"]
 
+const ListBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top : 400px;
+    left: 0;
+    z-index: 5;
+    height: 32%;
+    min-height : fit-content;
+`
+
+const CheckBox = styled.div`
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    align-self: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+`
+
+const CheckBoxLogo = styled(FontAwesomeIcon)`
+    font-size: 20px;
+`
+
 
 function Body() {
     // 어떤 카테고리를 눌렀는지
@@ -126,34 +154,51 @@ function Body() {
         console.log(event.currentTarget.innerText);
     }
 
-    useEffect(() => {
-        window.addEventListener('touchmove', handleScroll);
-        return () => {
-        window.removeEventListener('touchmove', handleScroll); //clean up
-        };
-    }, []);
+    // useEffect(() => {
+    //     window.addEventListener('touchmove', handleScroll);
+    //     return () => {
+    //     window.removeEventListener('touchmove', handleScroll); //clean up
+    //     };
+    // }, []);
 
-    let lastScrollY = 0;
-    const handleScroll = (e) => {
-        const scrollY = e.currentTarget.pageYOffset;
-        //const scrollY = e.path[1].window.pageYOffset;
-        const direction = scrollY - lastScrollY  > 0 ? false : true;
-        lastScrollY = scrollY;
-        if(direction){
-            console.log("down")
+    // let lastScrollY = 0;
+    // const handleScroll = (e) => {
+    //     const scrollY = e.currentTarget.pageYOffset;
+    //     //const scrollY = e.path[1].window.pageYOffset;
+    //     const direction = scrollY - lastScrollY  > 0 ? false : true;
+    //     lastScrollY = scrollY;
+    //     if(direction){
+    //         //console.log("down")
+    //     }else{
+    //         //console.log("up")
+    //     }
+    // };
+
+    // listUp & Down Btn
+    const [check, setCheck] = useState(false);
+    const listClick = () => {
+        if(check){
+            // list가 위에 있을 때
             $("#list").animate({
-                top: "420px",
-                height : "32%"
+                top: "400px",
+                //height : "32%"
             }, 500);
+            $("#realList").animate({
+                height : "32vh"
+            }, 500);
+            setCheck(prev => !prev);
         }else{
-            console.log("up")
+            // list가 아래로 있을 때
             $("#list").animate({
-                top: "100px",
-                height : "90%"
+                top: "80px",
+                //height : "90vh"
             }, 500);
+            $("#realList").animate({
+                height : "90vh"
+            }, 500);
+            setCheck(prev => !prev);
         }
-        
-    };
+    }
 
     
     return (
@@ -180,7 +225,11 @@ function Body() {
             <Map />
 
             {/* 나오는 리스트들 */}
-            <ListContainer id="list">
+            <ListBox id="list">
+                <CheckBox onClick={listClick}>
+                    <CheckBoxLogo icon={check ? faChevronDown : faChevronUp} />
+                </CheckBox>
+                <ListContainer>
                 <ListHeader>
                     <Swiper
                     slidesPerView={4}
@@ -198,7 +247,7 @@ function Body() {
                     </Swiper>
                 </ListHeader>
                 <ListDiv/>
-                <ItemBox>
+                <ItemBox id="realList">
                     {/* 검색 리스트가 쭉 뜨는 곳 */}
                     <Item>
                         <Info>
@@ -245,7 +294,8 @@ function Body() {
                         <ItemImg src={back}/>
                     </Item>
                 </ItemBox>
-            </ListContainer>
+                </ListContainer>
+            </ListBox>
         </Container>
     )
 }

@@ -18,6 +18,7 @@ const Background = styled.section`
     flex-direction: column;
     align-items: center;
     font-family: "Cafe24Ohsquareair";
+    overflow-y: hidden;
 `
 
 function Main () {
