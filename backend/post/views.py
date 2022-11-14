@@ -21,6 +21,7 @@ def main(request):
         send_category.append({c.name: c.id})
     for p in places:
         send_place.append({p.name: p.id})
+    count = 0
     for i in facilities:
         try:
             image_data = base64.b64encode(i.picture.read()).decode('utf-8')
@@ -38,6 +39,9 @@ def main(request):
             "floor": i.floor,
         }
         send_facility.append(facility_set)
+        count += 1
+        if count > 20:
+            break
 
     final_json = {
         "places": send_place,

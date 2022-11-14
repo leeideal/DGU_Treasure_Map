@@ -93,6 +93,7 @@ const FooterBox = styled.div`
     p{
         font-size: 14px;
         word-break: keep-all;
+        line-height: 1.5;
     }
 `
 
@@ -110,8 +111,10 @@ function Info(){
         try{
             const data = await API.get(`facility/${id}`);
             const reData = data.data;
+            const firstTime = reData.time.substring(0,5)+" " + reData.time.substring(9,16)
+            reData.time = firstTime;
             setData(reData)
-            console.log(data.data);
+            //console.log(data.data);
         }catch(error){
             console.log(error)
         }
