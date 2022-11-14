@@ -10,8 +10,8 @@ from .serializers import FacilitySerializer,PlaceSerializer,CategorySerializer
 def get_place(request, id):
     place_id = Place.objects.get(id=id)
     facilities = Facility.objects.filter(place=place_id)
-
     send_facility = []
+    
     for i in facilities:
         place_name = place_id.name
         category_name = i.category.name
@@ -30,3 +30,22 @@ def get_place(request, id):
         # send_facility.append(facility_set)
 
     return Response(data=send_facility)
+
+@api_view(['GET'])
+def get_category(request, id):
+    category_id = Category.objects.get(id=id)
+    facilities = Facility.objects.filter(place=category_id)
+    serializer = FacilitySerializer(facilities, many=True)
+
+    # facility_set = {
+    #     "name" = serializer.data['name'],
+    #     "category",
+    #     "id",
+    #     "time",
+    #     "img",
+    #     "phone",
+    #     "use",
+    #     "where",
+    #     "floor"
+    # }
+    return Response(data=serializer.data)
