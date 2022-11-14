@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import Header from '../components/main/Header';
-import Body from '../components/main/Body';
-
+import Header2 from "../components/detial/Header";
+import Info from "../components/detial/Info";
 
 const ToCenter = styled.div`
     width:100vw;
@@ -21,14 +20,15 @@ const Background = styled.section`
     overflow-y: hidden;
 `
 
-function Main () {
+function Detail(){
     return (
         <ToCenter>
             <Background>
-                <Header />
-                <Body />
+                <Header2/>
+                <Info />
             </Background>
         </ToCenter>
     );
 }
-export default Main;
+
+export default Detail;
