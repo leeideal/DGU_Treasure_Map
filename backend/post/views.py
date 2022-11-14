@@ -22,14 +22,14 @@ def get_place(request, id):
         # #     "id":i.id,
         # #     "time":,
         # #     "img":,
-        # #     "phone":,
-        # #     "use":,
+        # #     "phone":i.phone,
+        # #     "use":i.content,
         # #     "where":place_name,
-        # #     "floor":
+        # #     "floor":i.floor,
         # # }
         # send_facility.append(facility_set)
 
-    return Response(data=send_facility)
+    #return Response(data=send_facility)
 
 @api_view(['GET'])
 def get_category(request, id):
@@ -38,10 +38,13 @@ def get_category(request, id):
     facilities = Facility.objects.filter(category=category_id)
 
     send_place = []
+
     for i in facilities:
         place_name = i.place.name
         if place_name not in send_place:
             send_place.append(place_name)
+            
+    return Response(data=send_place)
 
     send_facility = []
     
@@ -55,11 +58,11 @@ def get_category(request, id):
         # #     "id":i.id,
         # #     "time":,
         # #     "img":,
-        # #     "phone":,
-        # #     "use":,
+        # #     "phone":i.phone,
+        # #     "use":i.content,
         # #     "where":place_name,
-        # #     "floor":
+        # #     "floor":i.floor,
         # # }
         # send_facility.append(facility_set)
 
-    return Response(data=send_facility)
+    #return Response(data=send_facility)
