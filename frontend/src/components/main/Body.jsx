@@ -76,12 +76,16 @@ const catelist = [
 ]
 
 const CItem = styled(SwiperSlide)`
-    background-color: white;
+    background-color: ${props => props.isActive ? "rgb(126, 172, 139)" : "white"};
+    margin: 5px 0.3px;
     border-radius: 10px;
     padding: 10px 15px;
     display: flex;
     justify-content: center;
     font-weight: 600;
+    color : ${props => props.isActive ? "white" : "black"};
+    box-shadow:${props => props.isActive ? "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" : "rgba(0, 0, 0, 0.16) 0px 1px 4px"};
+    transition: all 0.25s linear;
 `
 
 // List
@@ -264,6 +268,7 @@ function Body() {
     // 카테고리 클릭
     const [where, setWhere] = useRecoilState(isClick);
     const [cate, setCate] = useRecoilState(isCate);
+    const [btnClick, setBtnClick] = useState(10);
     // 어떤 카테고리를 눌렀는지
     const CategoryClick = async(event ,i) => {
         // 전채를 누른 경우 색 다시 들어오게
@@ -273,10 +278,9 @@ function Body() {
                 setWhere(0);
                 SetInfo(data.data.facilities);
                 setCate(data.data.places);
-
                 
                 setWhere([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]);
-
+                setBtnClick(10);
                 console.log(data.data.places);
             }catch(error){
                 console.log(error);
@@ -297,6 +301,8 @@ function Body() {
                     }
                     return array
                 });
+
+                setBtnClick(parseInt(id));
                 
                 console.log(data.data.places);
             }catch(error){
@@ -318,7 +324,7 @@ function Body() {
                     style={{marginRight: "10px", marginLeft:"10px"}} 
                 >
                     {catelist.map((i) => (
-                        <CItem onClick={(event) => CategoryClick(event , i)} key={i.id} value={i.name}>
+                        <CItem onClick={(event) => CategoryClick(event , i)} isActive={btnClick === i.id ? true : false} key={i.id} value={i.name}>
                             {i.name}
                         </CItem>
                     ))}
