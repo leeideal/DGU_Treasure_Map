@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://donnguk-tmap.netlify.app/']
 CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'backend.urls'
 
@@ -149,3 +149,8 @@ CORS_ALLOW_METHODS = [
 'POST',
 'PUT',
 ]
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "backend", "static")]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
