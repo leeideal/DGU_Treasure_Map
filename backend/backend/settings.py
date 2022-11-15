@@ -149,3 +149,8 @@ CORS_ALLOW_METHODS = [
 'POST',
 'PUT',
 ]
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "backend", "static")]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
